@@ -20,3 +20,4 @@ cd "./Data_Base" || { echo "Failed to change directory to Data_Base"; exit 1; }
 
 # Confirmation message
 echo "Changed directory to $(pwd)"
+# run this file using source ./create_db_folder.sh
