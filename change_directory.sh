@@ -1,2 +1,3 @@
-#! user/bin/csh
-cd ./Data_Base
+#!/bin/bash
+cd Data_Base
+

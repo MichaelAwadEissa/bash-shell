@@ -1,4 +1,4 @@
-#! user/bin/csh
+#!/bin/bash
 
 # Function to create Data_Base folder if it doesn't exist
 create_database_folder() {
@@ -14,3 +14,9 @@ create_database_folder() {
 
 # Call the function
 create_database_folder
+
+# Change directory to Data_Base
+cd "./Data_Base" || { echo "Failed to change directory to Data_Base"; exit 1; }
+
+# Confirmation message
+echo "Changed directory to $(pwd)"
