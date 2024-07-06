@@ -1,4 +1,4 @@
-#!/bin/bash
+#! user/bin/csh
 
 # Function to create Data_Base folder if it doesn't exist
 create_database_folder() {
