@@ -19,7 +19,7 @@ while true; do
     read choice
     case $choice in
         1) . ./create_db_from-user.sh ;;  # Assuming you have this function defined elsewhere
-        2). ./list_db.sh ;;   # Assuming you have this function defined elsewhere
+        2) . ./list_db.sh ;;   # Assuming you have this function defined elsewhere
         3) . ./connect_db.sh ;;  # Call connect_db.sh script
         4) . ./drop_db.sh ;;    # Assuming you have this function defined elsewhere
         5) exit 0 ;;
