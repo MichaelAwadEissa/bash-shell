@@ -13,8 +13,9 @@ main_menu() {
     echo -n "Enter your choice [1-5]: "
 }
 
-# Main script loop
-while true; do
+# Main script loopwhile true; do
+
+while (true); do
     main_menu
     read choice
     case $choice in

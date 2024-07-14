@@ -33,7 +33,8 @@ validate_directory_name "$user_dir_name"
 create_directory "$user_dir_name"
 
 # Change directory to the new directory
-cd "./$user_dir_name" || { echo "Failed to change directory to $user_dir_name"; exit 1; }
+cd "./$user_dir_name" || { echo "Failed to change directory to $user_dir_name"; }
+../main
 
 # Confirmation message
 echo "Changed directory to $(pwd)"
