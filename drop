@@ -1,0 +1,10 @@
+#!/usr/bin/env bash 
+echo "ALL TABLE IN THIS DATABASE"
+. ./list
+read -p "ENTER NAME THE TABLE TO DELETE IT  " name
+until [[ -e $name ]]
+do
+read -p "Inalid Name Or File Not Exists :  " name;
+done
+rm $name
+echo "$name Is Deleted";

@@ -6,9 +6,10 @@ do
 read -p "Inalid Name Or File Exists :  " nameTable;
 done
 touch ./$nameTable
+touch ./${nameTable}-meta
 echo You Create New Table $nameTable
-read -p "Enter Number Of Columns In Table :  " numCol;
 
+read -p "Enter Number Of Columns In Table :  " numCol;
 until [[ $numCol =~ ^[1-9] ]]
 do
 read -p "Enter Valid Number :  " numCol;
@@ -17,17 +18,24 @@ done
 for (( i=1;i<$numCol+1;i++ ))
 do
 read -p "ENTER NAME FOR COLUMN $i :  " name;
-match_count=$(grep -o -w "$name" "$nameTable" | wc -l)
+match_count=$(grep -o -w "$name" "${nameTable}-meta" | wc -l)
 until [[ $name =~ ^[a-zA-Z][a-zA-Z0-9] && $match_count == 0 ]]
 do
 read -p "Inalid Name Or Name Exists :  " name;
-match_count=$(grep -o -w "$name" "$nameTable" | wc -l)
+match_count=$(grep -o -w "$name" "${nameTable}-meta" | wc -l)
 done
-echo -n $name: >> ./$nameTable
+if [[ i -eq $numCol ]]
+then
+echo -n $name >> ./${nameTable}-meta
+else
+echo -n $name: >> ./${nameTable}-meta
+fi
 done
 
+
+
 condition=0
-echo chooce constrain
+echo CHOOCE CONSTRAIN
 for (( i=1;i<=$numCol;i++ ))
 do
 
@@ -39,43 +47,55 @@ then
 		do
 		case $var in
 		PrimaryKey)
-			constrain="Primary Key"
+			constrain="Primary-Key"
 			condition=1
 			break
 			;;
 		NonKey)
-			constrain="Non Key"
+			constrain="Non-Key"
 			break
 			;;
 		esac
 		done 
-		echo $condition
-		echo "" >> ./$nameTable
-		echo -n $constrain: >> ./$nameTable
+		echo "" >> ./${nameTable}-meta
+		echo -n $constrain: >> ./${nameTable}-meta
 elif [[ $condition -eq 1 ]]
 then
-		constrain="Non Key"
-		echo -n $constrain: >> ./$nameTable
+		constrain="Non-Key"
+		if [[ i -eq $numCol ]]
+		then
+		echo -n $constrain >> ./${nameTable}-meta
+		else
+		echo -n $constrain: >> ./${nameTable}-meta
+		fi
+		
 		
 else
 		select var in PrimaryKey NonKey
 		do
 		case $var in
 		"PrimaryKey")
-			constrain="Primary Key"
+			constrain="Primary-Key"
 			condition=1
 			break
 			;;
 		"NonKey")
-			constrain="Non Key"
+			constrain="Non-Key"
 			break
 			;;
 		esac
 		done 
-		echo -n $constrain: >> ./$nameTable
+		if [[ i -eq $numCol ]]
+		then
+		echo -n $constrain >> ./${nameTable}-meta
+		else
+		echo -n $constrain: >> ./${nameTable}-meta
+		fi
 fi
 done
-echo "" >> ./$nameTable
+echo "" >> ./${nameTable}-meta
+
+
 for (( i=1;i<=$numCol;i++ ))
 do
 
@@ -92,11 +112,14 @@ PS3="ENTER TYPE OF DATA FOR COLUMN $i #? "
 			break
 			;;
 		esac
-		
 		done 
-		
-		echo -n $type: >> ./$nameTable
+		if [[ i -eq $numCol ]]
+		then
+		echo -n $type >> ./${nameTable}-meta
+		else
+		echo -n $type: >> ./${nameTable}-meta
+		fi
 done
-
-
-
+echo "" >> ./${nameTable}-meta
+echo "TABLE ${nameTable}-meta IS CREATED"
+../main

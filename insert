@@ -1,0 +1,64 @@
+#!/usr/bin/env bash 
+echo "ALL TABLE IN THIS DATABASE"
+../list
+read -p "ENTER NAME THE TABLE  " name
+until [[ -e $name ]]
+do
+read -p "Inalid Name Or File Not Exists :  " name;
+done
+
+namecol=$(sed -n '1p' ./${name}-meta)
+constraincol=$(sed -n '2p' ./${name}-meta)
+typecol=$(sed -n '$p' ./${name}-meta)
+IFS=':'
+i=0
+read -ra row1 <<< "$namecol"
+read -ra row2 <<< "$constraincol"
+read -ra row3 <<< "$typecol"
+
+
+for element in "${row1[@]}"; 
+do
+    read -p "ENTER DATA FOR COLUMN $element " data
+    
+    if [[ ${row2[$i]} == "Non-Key" && ${row3[$i]} == "Integer" ]]
+    then
+    until [[ $data =~ ^[0-9] ]]
+    do 
+    read -p "ENTER VALID DATA FOR COLUMN $element " data
+    done
+    
+    
+    elif [[ ${row2[$i]} == "Non-Key" && ${row3[$i]} == "String" ]]
+    then
+    until [[ $data =~ ^[a-zA-Z] ]]
+    do 
+    read -p "ENTER VALID DATA FOR COLUMN $element " data
+    done
+    
+    
+    elif [[ ${row2[$i]} == "Primary-Key" && ${row3[$i]} == "String" ]]
+    then
+    until [[ $data =~ ^[a-zA-Z] ]]
+    do 
+    read -p "ENTER VALID DATA FOR COLUMN $element " data
+    done
+    
+    
+    elif [[ ${row2[$i]} == "Primary-Key" && ${row3[$i]} == "Integer" ]]
+    then
+    until [[ $data =~ ^[0-9] ]]
+    do 
+    read -p "ENTER VALID DATA FOR COLUMN $element " data
+    done
+    
+    fi
+    echo -n $data: >> ./${name}
+    let i++
+done
+
+
+echo "" >> ./${name}
+sed -i 's/\(.*\):/\1/' ${name}
+
+IFS=' '
