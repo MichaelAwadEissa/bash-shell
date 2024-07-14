@@ -1,0 +1,37 @@
+#!/usr/bin/env bash 
+PS3="ENTER NUMBER OF PROCESS#? "
+select var in Create-Table List-Tables Drop-Table Insert-into-Table Select-From-Table Delete-From-Table Update-Table
+do Back
+
+case $var in
+"Create-Table")	
+	./create
+	;;
+"List-Tables")
+	./list
+	;;
+"Drop-Table")
+	./drop
+	;;
+"Insert-into-Table")
+	./insert
+	;;
+"Select-From-Table")
+	./select
+	;;
+"Delete-From-Table")
+	./delete
+	;;
+"Back")
+	./Back
+	;;
+"Update-Table")
+	./update
+	;;
+*)
+	echo UNKNOWN PROCESS
+	;;
+
+esac
+
+done 

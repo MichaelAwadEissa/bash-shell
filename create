@@ -1,0 +1,102 @@
+#!/usr/bin/env bash 
+
+read -p "Enter Name Of Table :  " nameTable;
+until [[ $nameTable =~ ^[a-zA-Z][a-zA-Z0-9] && ! -e $nameTable ]]
+do
+read -p "Inalid Name Or File Exists :  " nameTable;
+done
+touch ./$nameTable
+echo You Create New Table $nameTable
+read -p "Enter Number Of Columns In Table :  " numCol;
+
+until [[ $numCol =~ ^[1-9] ]]
+do
+read -p "Enter Valid Number :  " numCol;
+done
+
+for (( i=1;i<$numCol+1;i++ ))
+do
+read -p "ENTER NAME FOR COLUMN $i :  " name;
+match_count=$(grep -o -w "$name" "$nameTable" | wc -l)
+until [[ $name =~ ^[a-zA-Z][a-zA-Z0-9] && $match_count == 0 ]]
+do
+read -p "Inalid Name Or Name Exists :  " name;
+match_count=$(grep -o -w "$name" "$nameTable" | wc -l)
+done
+echo -n $name: >> ./$nameTable
+done
+
+condition=0
+echo chooce constrain
+for (( i=1;i<=$numCol;i++ ))
+do
+
+PS3="ENTER NUMBER OF CONSTRAIN FOR COLUMN $i #? "
+if [[ $i == 1 ]]
+then
+
+		select var in PrimaryKey NonKey
+		do
+		case $var in
+		PrimaryKey)
+			constrain="Primary Key"
+			condition=1
+			break
+			;;
+		NonKey)
+			constrain="Non Key"
+			break
+			;;
+		esac
+		done 
+		echo $condition
+		echo "" >> ./$nameTable
+		echo -n $constrain: >> ./$nameTable
+elif [[ $condition -eq 1 ]]
+then
+		constrain="Non Key"
+		echo -n $constrain: >> ./$nameTable
+		
+else
+		select var in PrimaryKey NonKey
+		do
+		case $var in
+		"PrimaryKey")
+			constrain="Primary Key"
+			condition=1
+			break
+			;;
+		"NonKey")
+			constrain="Non Key"
+			break
+			;;
+		esac
+		done 
+		echo -n $constrain: >> ./$nameTable
+fi
+done
+echo "" >> ./$nameTable
+for (( i=1;i<=$numCol;i++ ))
+do
+
+PS3="ENTER TYPE OF DATA FOR COLUMN $i #? "
+		select var in Integer String
+		do
+		case $var in
+		"Integer")
+			type="Integer"
+			break
+			;;
+		"String")
+			type="String"
+			break
+			;;
+		esac
+		
+		done 
+		
+		echo -n $type: >> ./$nameTable
+done
+
+
+
