@@ -19,6 +19,7 @@ read -ra row3 <<< "$typecol"
 
 for element in "${row1[@]}"; 
 do
+c=1
     read -p "ENTER DATA FOR COLUMN $element " data
     
     if [[ ${row2[$i]} == "Non-Key" && ${row3[$i]} == "Integer" ]]
@@ -27,7 +28,7 @@ do
     do 
     read -p "ENTER VALID DATA FOR COLUMN $element " data
     done
-    
+    let c++
     
     elif [[ ${row2[$i]} == "Non-Key" && ${row3[$i]} == "String" ]]
     then
@@ -35,22 +36,89 @@ do
     do 
     read -p "ENTER VALID DATA FOR COLUMN $element " data
     done
+    let c++
     
     
     elif [[ ${row2[$i]} == "Primary-Key" && ${row3[$i]} == "String" ]]
     then
-    until [[ $data =~ ^[a-zA-Z] ]]
+    count=$(awk -v c="$c" -v data="$data" '
+	BEGIN{
+	FS=":"
+	count=0
+	}
+	{
+	if(data==$c){
+	count=1
+	}
+
+	}
+	END{
+	print count
+	}
+	' ./$name)
+	echo $count
+    until [[ $data =~ ^[a-zA-Z] ]] && (( ! $count == 1 ))
     do 
     read -p "ENTER VALID DATA FOR COLUMN $element " data
+    count=$(awk -v c="$c" -v data="$data" '
+	BEGIN{
+	FS=":"
+	count=0
+	}
+	{
+	if(data==$c){
+	count=1
+	}
+
+	}
+	END{
+	print count
+	}
+	' ./$name)
     done
+    echo $count
+    let c++
     
     
     elif [[ ${row2[$i]} == "Primary-Key" && ${row3[$i]} == "Integer" ]]
     then
-    until [[ $data =~ ^[0-9] ]]
+    count=$(awk -v c="$c" -v data="$data" '
+	BEGIN{
+	FS=":"
+	count=0
+	}
+	{
+	if(data==$c){
+	count=1
+	}
+
+	}
+	END{
+	print count
+	}
+	' ./$name)
+	echo $count
+    until [[ $data =~ ^[0-9] ]] && (( ! $count == 1 ))
     do 
     read -p "ENTER VALID DATA FOR COLUMN $element " data
+    count=$(awk -v c="$c" -v data="$data" '
+	BEGIN{
+	FS=":"
+	count=0
+	}
+	{
+	if(data==$c){
+	count=1
+	}
+
+	}
+	END{
+	print count
+	}
+	' ./$name)
+    
     done
+    let c++
     
     fi
     echo -n $data: >> ./${name}
@@ -59,6 +127,7 @@ done
 
 
 echo "" >> ./${name}
-sed -i 's/\(.*\):/\1/' ${name}
+
 
 IFS=' '
+../main
