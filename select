@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+echo "ALL TABLE IN THIS DATABASE"
+../list
+read -p "ENTER NAME THE TABLE  " name
+until [[ -e $name ]]
+do
+read -p "Inalid Name Or File Not Exists :  " name;
+done
+PS3="SELECT THE WAY TO DISPLAY THE DATA #? "
+select var in ALL BY-COLUMN
+do
+case $var in
+"ALL")	
+	cat ./$name
+	break
+	;;
+"BY-COLUMN")	
+	echo "COLUMNS IN ${name} TABLE" 
+	sed -n '1p' ./${name}-meta
+	read -p "Enter NAME Of Column In Table :  " namCol;
+	until [[ $namCol =~ ^[a-zA-Z][a-zA-Z0-9] ]]
+	do
+	read -p "Enter Valid NAME :  " namCol;
+	done
+	numcol=$(awk -v namCol="$namCol" '
+	BEGIN{
+	FS=":"
+	count=0
+	}
+	{
+	i=1
+	line=""
+	while (i<=NF){
+		if($i==namCol){
+			count=i
+			line=$0
+	}
+	i++;
+	}
+	}
+	END{
+	print count
+	}
+	' ./${name}-meta)
+
+	cut -d : -f $numcol ./${name}
+	
+	break
+	;;
+esac
+
+done 
+../main
