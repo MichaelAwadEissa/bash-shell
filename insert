@@ -56,7 +56,6 @@ c=1
 	print count
 	}
 	' ./$name)
-	echo $count
     until [[ $data =~ ^[a-zA-Z] ]] && (( ! $count == 1 ))
     do 
     read -p "ENTER VALID DATA FOR COLUMN $element " data
@@ -76,7 +75,6 @@ c=1
 	}
 	' ./$name)
     done
-    echo $count
     let c++
     
     
@@ -97,7 +95,6 @@ c=1
 	print count
 	}
 	' ./$name)
-	echo $count
     until [[ $data =~ ^[0-9] ]] && (( ! $count == 1 ))
     do 
     read -p "ENTER VALID DATA FOR COLUMN $element " data
